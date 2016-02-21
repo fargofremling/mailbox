@@ -10,6 +10,7 @@ import UIKit
 
 class MailboxViewController: UIViewController {
     
+    @IBOutlet weak var inboxView: UIView!
     @IBOutlet weak var mailboxScrollView: UIScrollView!
     @IBOutlet weak var messageView: UIView!
     @IBOutlet weak var deleteView: UIImageView!
@@ -84,10 +85,12 @@ class MailboxViewController: UIViewController {
         else if sender.state == UIGestureRecognizerState.Ended {
             if velocity.x < 0 {
                 if location.x > 60 {
-                    listPageView.alpha = 1
+                    reschedulePageView.alpha = 1
+                    inboxView.alpha = 0
                 }
                 else {
-                    reschedulePageView.alpha = 1
+                    listPageView.alpha = 1
+                    inboxView.alpha = 0
                 }
             }
             else {
@@ -116,6 +119,15 @@ class MailboxViewController: UIViewController {
         deleteView.alpha = 1
     }
     
+    @IBAction func didTapListPage(sender: UITapGestureRecognizer) {
+            listPageView.alpha = 0
+            inboxView.alpha = 1
+    }
+    
+    @IBAction func didTapReschedule(sender: AnyObject) {
+        reschedulePageView.alpha = 0
+        inboxView.alpha = 1
+    }
     
     /*
     // MARK: - Navigation

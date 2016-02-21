@@ -42,12 +42,11 @@ class MailboxViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    
     @IBAction func didPanMessage(sender: UIPanGestureRecognizer) {
         
-        var location = sender.locationInView(view)
-        var translation = sender.translationInView(view)
-        var velocity = sender.velocityInView(view)
+        let location = sender.locationInView(view)
+        let translation = sender.translationInView(view)
+        let velocity = sender.velocityInView(view)
         
         if sender.state == UIGestureRecognizerState.Began {
             self.subjectOriginalCenter = subjectView.center
@@ -94,39 +93,65 @@ class MailboxViewController: UIViewController {
                 }
             }
             else {
+                subjectViewReturn()
             }
         }
     }
     
-    func rescheduleReveal () {
+    func rescheduleReveal() {
         messageView.backgroundColor = UIColor.yellowColor()
         rescheduleView.alpha = 1
+        listView.alpha = 0
+        archiveView.alpha = 0
+        deleteView.alpha = 0
         
     }
     
-    func listReveal () {
+    func listReveal() {
         messageView.backgroundColor = UIColor.brownColor()
         listView.alpha = 1
+        rescheduleView.alpha = 0
+        archiveView.alpha = 0
+        deleteView.alpha = 0
     }
     
-    func archiveReveal () {
+    func archiveReveal() {
         messageView.backgroundColor = UIColor.greenColor()
         archiveView.alpha = 1
+        rescheduleView.alpha = 0
+        listView.alpha = 0
+        deleteView.alpha = 0
     }
     
-    func deleteReveal () {
+    func deleteReveal() {
         messageView.backgroundColor = UIColor.redColor()
         deleteView.alpha = 1
+        archiveView.alpha = 0
+        rescheduleView.alpha = 0
+        listView.alpha = 0
     }
     
+    func subjectViewReturn() {
+        UIView.animateWithDuration(0.4, animations: { () -> Void in
+            self.subjectView.center = self.subjectOriginalCenter
+            }) { (Bool) -> Void in
+                self.deleteView.alpha = 0
+                self.archiveView.alpha = 0
+                self.rescheduleView.alpha = 0
+                self.listView.alpha = 0
+                self.messageView.backgroundColor = UIColor.grayColor()
+        }
+    }
     @IBAction func didTapListPage(sender: UITapGestureRecognizer) {
             listPageView.alpha = 0
             inboxView.alpha = 1
+            subjectViewReturn()
     }
     
     @IBAction func didTapReschedule(sender: AnyObject) {
         reschedulePageView.alpha = 0
         inboxView.alpha = 1
+        subjectViewReturn()
     }
     
     /*

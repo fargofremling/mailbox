@@ -62,11 +62,11 @@
                                                         <autoresizingMask key="autoresizingMask"/>
                                                     </imageView>
                                                     <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="later_icon" id="DKC-fR-Zlc">
-                                                        <rect key="frame" x="283" y="31" width="25" height="25"/>
+                                                        <rect key="frame" x="283" y="30" width="25" height="25"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                     </imageView>
                                                     <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="list_icon" id="a83-zK-eeH">
-                                                        <rect key="frame" x="211" y="25" width="25" height="25"/>
+                                                        <rect key="frame" x="60" y="30" width="25" height="25"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                     </imageView>
                                                     <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="delete_icon" id="lse-dQ-UUP">

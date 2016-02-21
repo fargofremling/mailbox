@@ -54,8 +54,14 @@ class MailboxViewController: UIViewController {
             
         else if sender.state == UIGestureRecognizerState.Changed {
             subjectView.center = CGPoint (x: subjectOriginalCenter.x + translation.x, y: subjectOriginalCenter.y)
-            if velocity.x < 0 {
-                if location.x > 60 {
+            if translation.x < 0 {
+                if translation.x > -60 {
+                    UIView.animateWithDuration(0.3, animations: { () -> Void in
+                        self.messageView.backgroundColor = UIColor.grayColor()
+                        self.rescheduleView.alpha = 0.5
+                    })
+                }
+                else if translation.x < -60 && translation.x > -260 {
                     UIView.animateWithDuration(0.3, animations: { () -> Void in
                         self.rescheduleReveal()
                     })
@@ -67,7 +73,14 @@ class MailboxViewController: UIViewController {
                 }
             }
             else {
-                if location.x < 260 {
+                if translation.x <= 60 {
+                    UIView.animateWithDuration(0.3, animations:
+                        { () -> Void in
+                            self.messageView.backgroundColor = UIColor.grayColor()
+                            self.archiveView.alpha = 0.5
+                    })
+                }
+                else if translation.x > 60 && translation.x < 260 {
                     UIView.animateWithDuration(0.3, animations:
                         { () -> Void in
                             self.archiveReveal()
@@ -99,11 +112,12 @@ class MailboxViewController: UIViewController {
     }
     
     func rescheduleReveal() {
-        messageView.backgroundColor = UIColor.yellowColor()
-        rescheduleView.alpha = 1
-        listView.alpha = 0
-        archiveView.alpha = 0
-        deleteView.alpha = 0
+            messageView.backgroundColor = UIColor.yellowColor()
+            rescheduleView.alpha = 1
+            listView.alpha = 0
+            archiveView.alpha = 0
+            deleteView.alpha = 0
+//        }
         
     }
     
@@ -132,7 +146,7 @@ class MailboxViewController: UIViewController {
     }
     
     func subjectViewReturn() {
-        UIView.animateWithDuration(0.4, animations: { () -> Void in
+        UIView.animateWithDuration(0.3, animations: { () -> Void in
             self.subjectView.center = self.subjectOriginalCenter
             }) { (Bool) -> Void in
                 self.deleteView.alpha = 0

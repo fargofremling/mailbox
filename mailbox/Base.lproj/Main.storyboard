@@ -97,6 +97,7 @@
                     <connections>
                         <outlet property="archiveView" destination="8LX-Xj-HlU" id="tYA-GT-bWi"/>
                         <outlet property="deleteView" destination="lse-dQ-UUP" id="Mjl-4E-N99"/>
+                        <outlet property="feedView" destination="buT-cR-ZlU" id="3mC-Ao-ksb"/>
                         <outlet property="inboxView" destination="Gqm-wu-ftp" id="HAr-k0-Fws"/>
                         <outlet property="listPageView" destination="4CQ-Yl-Tei" id="Toa-vL-Vf5"/>
                         <outlet property="listView" destination="a83-zK-eeH" id="egU-ZY-oVN"/>

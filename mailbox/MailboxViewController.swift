@@ -18,14 +18,23 @@ class MailboxViewController: UIViewController {
     @IBOutlet weak var rescheduleView: UIImageView!
     @IBOutlet weak var listView: UIImageView!
     @IBOutlet weak var subjectView: UIImageView!
+    @IBOutlet weak var feedView: UIImageView!
     @IBOutlet weak var listPageView: UIImageView!
     @IBOutlet weak var reschedulePageView: UIImageView!
     
     var subjectOriginalCenter: CGPoint!
     
+    var messageHiddenOffset: CGFloat!
+    var feedViewOriginalCenter: CGPoint!
+    var messageHiddenMoveFeed: CGPoint!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.mailboxScrollView.contentSize = CGSize (width: 320, height: 1432)
+        subjectOriginalCenter = subjectView.center
+        messageHiddenOffset = 86
+        feedViewOriginalCenter = feedView.center
+        messageHiddenMoveFeed = CGPoint (x: feedView.center.x, y: feedView.center.y + messageHiddenOffset)
         deleteView.alpha = 0
         archiveView.alpha = 0
         rescheduleView.alpha = 0
@@ -96,13 +105,24 @@ class MailboxViewController: UIViewController {
         }
         else if sender.state == UIGestureRecognizerState.Ended {
             if velocity.x < 0 {
-                if location.x > 60 {
+                if translation.x > -60 {
+                    subjectViewReturn()
+                }
+                else if translation.x < -60 && translation.x > -240 {
                     reschedulePageView.alpha = 1
                     inboxView.alpha = 0
                 }
                 else {
                     listPageView.alpha = 1
                     inboxView.alpha = 0
+                }
+            }
+            else if velocity.x > 0 {
+                if translation.x < 60 {
+                    subjectViewReturn()
+                }
+                else {
+                    actionTakenOnMessage()
                 }
             }
             else {
@@ -112,13 +132,11 @@ class MailboxViewController: UIViewController {
     }
     
     func rescheduleReveal() {
-            messageView.backgroundColor = UIColor.yellowColor()
-            rescheduleView.alpha = 1
-            listView.alpha = 0
-            archiveView.alpha = 0
-            deleteView.alpha = 0
-//        }
-        
+        messageView.backgroundColor = UIColor.yellowColor()
+        rescheduleView.alpha = 1
+        listView.alpha = 0
+        archiveView.alpha = 0
+        deleteView.alpha = 0
     }
     
     func listReveal() {
@@ -145,6 +163,24 @@ class MailboxViewController: UIViewController {
         listView.alpha = 0
     }
     
+    func actionTakenOnMessage() {
+        UIView.animateWithDuration(1, animations: { () -> Void in
+            self.messageView.hidden = true
+            self.feedView.center = self.messageHiddenMoveFeed
+            UIView.animateWithDuration(0.3, delay: 5, options: [], animations: { () -> Void in
+                }, completion: { (Bool) -> Void in
+                    self.feedView.center = self.feedViewOriginalCenter
+            })
+            }) { (Bool) -> Void in
+                self.messageView.hidden = false
+                self.deleteView.alpha = 0
+                self.archiveView.alpha = 0
+                self.rescheduleView.alpha = 0
+                self.listView.alpha = 0
+                self.messageView.backgroundColor = UIColor.grayColor()
+                self.subjectView.center = self.subjectOriginalCenter
+        }
+    }
     func subjectViewReturn() {
         UIView.animateWithDuration(0.3, animations: { () -> Void in
             self.subjectView.center = self.subjectOriginalCenter
@@ -157,15 +193,15 @@ class MailboxViewController: UIViewController {
         }
     }
     @IBAction func didTapListPage(sender: UITapGestureRecognizer) {
-            listPageView.alpha = 0
-            inboxView.alpha = 1
-            subjectViewReturn()
+        listPageView.alpha = 0
+        inboxView.alpha = 1
+        actionTakenOnMessage()
     }
     
     @IBAction func didTapReschedule(sender: AnyObject) {
         reschedulePageView.alpha = 0
         inboxView.alpha = 1
-        subjectViewReturn()
+        actionTakenOnMessage()
     }
     
     /*

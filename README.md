@@ -22,8 +22,11 @@ Time spent: #12 hours
      - Upon release, the message should continue to reveal the green background. When the animation it complete, it should hide the message.
    - After 260 pts, the icon should change to the delete icon and the background color should change to red.
      - Upon release, the message should continue to reveal the red background. When the animation it complete, it should hide the message.
+ - Optional: Panning from the edge should reveal the menu
+  - Optional: If the menu is being revealed when the user lifts their finger, it should continue revealing.
   
 #Demo GIF
+(demo does not include edge pan - feature added last mintue)
 
 <img src='AssignmentWalkthrough.gif' title='Assignment Walkthrough' width='' alt='Walkthrough of the Mailbox Assignment.'/>
 

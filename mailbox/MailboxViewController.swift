@@ -68,9 +68,8 @@ class MailboxViewController: UIViewController {
     
     @IBAction func didPanMessage(sender: UIPanGestureRecognizer) {
         
-        var location = sender.locationInView(view)
-        var translation = sender.translationInView(view)
-        var velocity = sender.velocityInView(view)
+        let translation = sender.translationInView(view)
+        let velocity = sender.velocityInView(view)
         
         if sender.state == UIGestureRecognizerState.Began {
             self.subjectOriginalCenter = subjectView.center

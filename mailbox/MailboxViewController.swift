@@ -24,6 +24,9 @@ class MailboxViewController: UIViewController {
     
     var subjectOriginalCenter: CGPoint!
     
+    var rescheduleViewOrigianlCenter:CGPoint!
+    var archiveViewOriginalCenter: CGPoint!
+    
     var messageHiddenOffset: CGFloat!
     var feedViewOriginalCenter: CGPoint!
     var messageHiddenMoveFeed: CGPoint!
@@ -32,6 +35,8 @@ class MailboxViewController: UIViewController {
         super.viewDidLoad()
         self.mailboxScrollView.contentSize = CGSize (width: 320, height: 1432)
         subjectOriginalCenter = subjectView.center
+        archiveViewOriginalCenter = archiveView.center
+        rescheduleViewOrigianlCenter = rescheduleView.center
         messageHiddenOffset = 86
         feedViewOriginalCenter = feedView.center
         messageHiddenMoveFeed = CGPoint (x: feedView.center.x, y: feedView.center.y + messageHiddenOffset)
@@ -53,9 +58,9 @@ class MailboxViewController: UIViewController {
     
     @IBAction func didPanMessage(sender: UIPanGestureRecognizer) {
         
-        let location = sender.locationInView(view)
-        let translation = sender.translationInView(view)
-        let velocity = sender.velocityInView(view)
+        var location = sender.locationInView(view)
+        var translation = sender.translationInView(view)
+        var velocity = sender.velocityInView(view)
         
         if sender.state == UIGestureRecognizerState.Began {
             self.subjectOriginalCenter = subjectView.center
@@ -70,10 +75,11 @@ class MailboxViewController: UIViewController {
                         self.rescheduleView.alpha = 0.5
                     })
                 }
-                else if translation.x < -60 && translation.x > -260 {
+                else if translation.x < -60 && translation.x > -240 {
                     UIView.animateWithDuration(0.3, animations: { () -> Void in
                         self.rescheduleReveal()
                     })
+                    self.rescheduleView.center = CGPoint (x: 60 + self.rescheduleViewOrigianlCenter.x + translation.x, y: self.rescheduleViewOrigianlCenter.y)
                 }
                 else {
                     UIView.animateWithDuration(0.3, animations: { () -> Void in
@@ -94,6 +100,7 @@ class MailboxViewController: UIViewController {
                         { () -> Void in
                             self.archiveReveal()
                     })
+                    self.archiveView.center = CGPoint (x: -60 + self.archiveViewOriginalCenter.x + translation.x, y: self.archiveViewOriginalCenter.y)
                 }
                 else {
                     UIView.animateWithDuration(0.3, animations:
@@ -109,20 +116,47 @@ class MailboxViewController: UIViewController {
                     subjectViewReturn()
                 }
                 else if translation.x < -60 && translation.x > -240 {
-                    reschedulePageView.alpha = 1
-                    inboxView.alpha = 0
+                    UIView.animateWithDuration(0.3, animations: { () -> Void in
+                        self.rescheduleView.alpha = 0
+                        self.subjectView.center = CGPoint (x: self.subjectOriginalCenter.x - 480, y: self.subjectOriginalCenter.y)
+                        self.messageView.backgroundColor = UIColor.yellowColor()
+                        }, completion: { (Bool) -> Void in
+                            self.reschedulePageView.alpha = 1
+                            self.inboxView.alpha = 0
+                    })
                 }
                 else {
-                    listPageView.alpha = 1
-                    inboxView.alpha = 0
+                    UIView.animateWithDuration(0.3, animations: { () -> Void in
+                        self.listPageView.alpha = 0
+                        self.subjectView.center = CGPoint (x: self.subjectOriginalCenter.x - 480, y: self.subjectOriginalCenter.y)
+                        self.messageView.backgroundColor = UIColor.brownColor()
+                        }, completion: { (Bool) -> Void in
+                            self.listPageView.alpha = 1
+                            self.inboxView.alpha = 0
+                    })
                 }
             }
             else if velocity.x > 0 {
                 if translation.x < 60 {
                     subjectViewReturn()
                 }
+                else if translation.x > 60 && translation.x < 260 {
+                    UIView.animateWithDuration(0.3, animations: { () -> Void in
+                        self.archiveView.alpha = 0
+                        self.subjectView.center = CGPoint (x: self.subjectOriginalCenter.x + 480, y: self.subjectOriginalCenter.y)
+                        self.messageView.backgroundColor = UIColor.greenColor()
+                        }, completion: { (Bool) -> Void in
+                        self.actionTakenOnMessage()
+                    })
+                }
                 else {
-                    actionTakenOnMessage()
+                    UIView.animateWithDuration(0.3, animations: { () -> Void in
+                        self.deleteView.alpha = 0
+                        self.subjectView.center = CGPoint (x: self.subjectOriginalCenter.x + 480, y: self.subjectOriginalCenter.y)
+                        self.messageView.backgroundColor = UIColor.redColor()
+                        }, completion: { (Bool) -> Void in
+                            self.actionTakenOnMessage()
+                    })
                 }
             }
             else {
@@ -179,6 +213,7 @@ class MailboxViewController: UIViewController {
                 self.listView.alpha = 0
                 self.messageView.backgroundColor = UIColor.grayColor()
                 self.subjectView.center = self.subjectOriginalCenter
+                self.rescheduleView.center = self.rescheduleViewOrigianlCenter
         }
     }
     func subjectViewReturn() {

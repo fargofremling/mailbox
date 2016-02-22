@@ -10,6 +10,7 @@ import UIKit
 
 class MailboxViewController: UIViewController {
     
+    @IBOutlet weak var menuView: UIImageView!
     @IBOutlet weak var inboxView: UIView!
     @IBOutlet weak var mailboxScrollView: UIScrollView!
     @IBOutlet weak var messageView: UIView!
@@ -22,7 +23,10 @@ class MailboxViewController: UIViewController {
     @IBOutlet weak var listPageView: UIImageView!
     @IBOutlet weak var reschedulePageView: UIImageView!
     
+    @IBOutlet weak var menuButton: UIButton!
     var subjectOriginalCenter: CGPoint!
+    
+    var inboxViewOriginalCenter: CGPoint!
     
     var rescheduleViewOrigianlCenter:CGPoint!
     var archiveViewOriginalCenter: CGPoint!
@@ -33,6 +37,7 @@ class MailboxViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        inboxViewOriginalCenter = inboxView.center
         self.mailboxScrollView.contentSize = CGSize (width: 320, height: 1432)
         subjectOriginalCenter = subjectView.center
         archiveViewOriginalCenter = archiveView.center
@@ -40,6 +45,7 @@ class MailboxViewController: UIViewController {
         messageHiddenOffset = 86
         feedViewOriginalCenter = feedView.center
         messageHiddenMoveFeed = CGPoint (x: feedView.center.x, y: feedView.center.y + messageHiddenOffset)
+        menuView.alpha = 0
         deleteView.alpha = 0
         archiveView.alpha = 0
         rescheduleView.alpha = 0
@@ -47,6 +53,10 @@ class MailboxViewController: UIViewController {
         listPageView.alpha = 0
         reschedulePageView.alpha = 0
         subjectView.alpha = 1
+        
+//        var edgeGesture = UIScreenEdgePanGestureRecognizer(target: self, action: "onEdgePan:")
+//        edgeGesture.edges = UIRectEdge.Left
+//        inboxView.addGestureRecognizer(edgeGesture)
         
         // Do any additional setup after loading the view.
     }
@@ -237,6 +247,40 @@ class MailboxViewController: UIViewController {
         reschedulePageView.alpha = 0
         inboxView.alpha = 1
         actionTakenOnMessage()
+    }
+    
+//    @IBAction func edgeGesture(sender: UIScreenEdgePanGestureRecognizer) {
+//        print ("did edge pan")
+//        if inboxView.center == inboxViewOriginalCenter {
+//            menuOpen()
+//        }
+//        else {
+//            menuClose()
+//        }
+//    }
+    
+    @IBAction func didPressMenuButton(sender: AnyObject) {
+        print ("button press")
+        if inboxView.center == inboxViewOriginalCenter {
+            menuOpen()
+        }
+        else {
+            menuClose()
+        }
+    }
+    
+    func menuOpen() {
+        UIView.animateWithDuration(0.3, animations: { () -> Void in
+            self.menuView.alpha = 1
+            self.inboxView.center = CGPoint (x: self.inboxViewOriginalCenter.x + 280, y: self.inboxViewOriginalCenter.y)
+            })
+    }
+    
+    func menuClose() {
+        UIView.animateWithDuration(0.3, animations: { () -> Void in
+            self.menuView.alpha = 0
+            self.inboxView.center = self.inboxViewOriginalCenter
+        })
     }
     
     /*
